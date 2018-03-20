@@ -7,7 +7,7 @@ def GetChecksum(Pin):
 	Pin = str(Pin)
 	Acc = 0									# Se Inicializa Un Acumulador.
 	
-	if not Pin.isdigit() and len(Pin) > 7: return 'Error'
+	if not Pin.isdigit() or len(Pin) > 7: return 'Error'
 	if len(Pin) < 7: Pin = Pin.zfill(7)		# Si El Pin es Menor a 7 Digitos se Agregan 0's por Izquierda.
 	
 	Pin = int(Pin)
