@@ -4,10 +4,13 @@
 
 def GetChecksum(Pin):
 	
+	Pin = str(Pin)
 	Acc = 0									# Se Inicializa Un Acumulador.
 	
-	if not Pin.isdigit() or not len(Pin) == 7: return 'Error'
-	else: Pin = int(Pin)
+	if not Pin.isdigit(): return 'Error'
+	if len(Pin) < 7: Pin = Pin.zfill(7)		# Si El Pin es Menor a 7 Digitos se Agregan 0's por Izquierda.
+	
+	Pin = int(Pin)
 	
 	Pin = Pin * 10							# Se Agrega un Cero, Octavo Digito.
 	
@@ -22,7 +25,23 @@ def GetChecksum(Pin):
 	Digito = Acc % 10						# Se Extrae el Ultimo Digito del Valor Acumulado.
 	CheckSum = (10 - Digito) % 10			# Se Le Resta al Numero 10 el Digito, Si el Resultado Fuera 10 se toma como 0.
 	
-	return Pin + CheckSum					# Se Devuelve el PIN ya Completo.
+	return str(Pin + CheckSum).zfill(8)					# Se Devuelve el PIN ya Completo.
+
+
+def IsValidPIN(Pin):	# Comprueba Si El PIN WPS es Valido.
+	
+	Pin = str(Pin)
+	
+	if len(Pin) > 8: return False
+	if len(Pin) < 8: Pin = Pin.zfill(8)		# Si El Pin es Menor a 8 Digitos se Agregan 0's por Izquierda.
+	
+	Valido = GetChecksum(Pin[:-1])
+	
+	if Pin == Valido: return True
+	else: return False
+
+
+#=======================================================================
 
 if __name__ == "__main__":
 	
@@ -36,7 +55,12 @@ if __name__ == "__main__":
 	#	01234565		0123456		 5			Correcto
 	#	12332112		1233211		 2			Incorrecto	(Checksum Correcto: 3)
 	
-	PIN = GetChecksum('2012822')
+	Num = 1233211
+	PIN = GetChecksum(Num)
+	print('\n\n [*] Numero:\t ' + str(Num).zfill(7) + '\n [+] PIN:\t ' + PIN)
 	
-	print('\n\n PIN:', PIN)
+	PIN = 12332112
+	Valid = IsValidPIN(PIN)
+	print('\n\n [*] PIN:\t ' + str(PIN).zfill(8) + '\n [+] Es Valido:  ' + str(Valid))
+	
 	
